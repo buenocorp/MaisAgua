@@ -1,10 +1,28 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Image,
+  Animated,
+  Easing
+} from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Bebi extends Component {
   constructor(props) {
     super(props);
-    this.state = { ml: '', total: 0, resultadoText: "" };
+    this.state = {
+      ml: "",
+      total: 0,
+      meta: 0,
+      resultadoText: "",
+      atingiuMeta: false
+    };
+    this.getLitros();
+
+    this.animatedValue = new Animated.Value(0);
   }
 
   static navigationOptions = {
@@ -19,6 +37,22 @@ export default class Bebi extends Component {
     headerTintColor: "#FFF" //"#6dc4a4"
   };
 
+  getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@MaisAguaMeta");
+      const state = this.state;
+      if (value !== null) {
+        state.meta = value;
+
+        this.setState(state);
+      }
+    } catch (e) {
+      state.meta = 0;
+
+      this.setState(state);
+    }
+  };
+
   adicionar = () => {
     const soma = parseFloat(this.state.ml || 200) + this.state.total;
     const state = this.state;
@@ -30,12 +64,82 @@ export default class Bebi extends Component {
     }
 
     state.resultadoText = `${state.total / 1000} litros`;
-    state.ml='';
+    state.ml = "";
+
+    this.setState(state);
+
+    this.storeLitros();
+
+    this.verificaMeta();
+  };
+
+  storeLitros = async () => {
+    try {
+      await AsyncStorage.setItem("@MaisAguaLit", String(this.state.total));
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  getLitros = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@MaisAguaLit");
+      const state = this.state;
+      if (value !== null) {
+        state.total = parseFloat(value);
+        state.resultadoText = `${value / 1000} litros`;
+        this.setState(state);
+      }
+    } catch (e) {
+      state.total = 0;
+
+      this.setState(state);
+    }
+
+    this.verificaMeta();
+  };
+
+  verificaMeta = () => {
+    const state = this.state;
+    if (this.state.total / 1000 >= this.state.meta) {
+      state.atingiuMeta = true;
+    } else {
+      state.atingiuMeta = false;
+    }
 
     this.setState(state);
   };
 
+  componentDidMount() {
+    this.animate();
+  }
+
+  animate() {
+    this.animatedValue.setValue(0);
+    Animated.timing(this.animatedValue, {
+      toValue: 1,
+      duration: 2000,
+      easing: Easing.linear
+    }).start(() => this.animate());
+  }
+
   render() {
+    this.getData();
+    const textSize = this.animatedValue.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [18, 32, 18]
+    });
+    const meta = (
+      <Animated.Text
+        style={{
+          fontSize: textSize,
+          marginTop: 10,
+          color: "green"
+        }}
+      >
+        Atingiu a meta!
+      </Animated.Text>
+    );
     return (
       <View style={styles.container}>
         <Image
@@ -45,6 +149,8 @@ export default class Bebi extends Component {
               "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
           }}
         />
+        <Text style={styles.meta}>Minha meta: {this.state.meta}</Text>
+        <View>{this.state.atingiuMeta ? meta : null}</View>
         <Text style={styles.resultado}>{this.state.resultadoText}</Text>
         <View style={styles.entradas}>
           <TextInput
@@ -83,9 +189,6 @@ const styles = {
     color: "gray",
     borderRadius: 10
   },
-  card: {
-    width: 250
-  },
   resultado: {
     alignSelf: "center",
     color: "gray",
@@ -93,11 +196,11 @@ const styles = {
     textAlign: "justify",
     padding: 5
   },
-  obs: {
+  meta: {
     alignSelf: "center",
     color: "gray",
     fontSize: 18,
-    padding: 35,
-    textAlign: "justify"
+    textAlign: "justify",
+    padding: 5
   }
 };
