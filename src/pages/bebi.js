@@ -6,7 +6,8 @@ import {
   Button,
   Image,
   Animated,
-  Easing
+  Easing,
+  Vibration
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -37,6 +38,13 @@ export default class Bebi extends Component {
     headerTintColor: "#FFF" //"#6dc4a4"
   };
 
+  vibrate = (duration) => {
+    //const DURATION = 10000;
+    //const PATTERN = [1000, 2000, 3000];
+
+    Vibration.vibrate(duration);
+  };
+
   getData = async () => {
     try {
       const value = await AsyncStorage.getItem("@MaisAguaMeta");
@@ -54,6 +62,7 @@ export default class Bebi extends Component {
   };
 
   adicionar = () => {
+    this.vibrate(200);
     const soma = parseFloat(this.state.ml || 200) + this.state.total;
     const state = this.state;
 
@@ -71,6 +80,7 @@ export default class Bebi extends Component {
     this.storeLitros();
 
     this.verificaMeta();
+    //Vibration.cancel();
   };
 
   storeLitros = async () => {
@@ -101,7 +111,7 @@ export default class Bebi extends Component {
 
   verificaMeta = () => {
     const state = this.state;
-    if (this.state.total / 1000 >= this.state.meta) {
+    if ((this.state.total / 1000 >= this.state.meta) && (this.state.total > 0) && (this.state.meta >0)) {
       state.atingiuMeta = true;
     } else {
       state.atingiuMeta = false;

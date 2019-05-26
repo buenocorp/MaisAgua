@@ -84,7 +84,7 @@ export default class Main extends Component {
     return (
       <View style={styles.container}>
         <Image
-          style={{ width: 250, height: 180 }}
+          style={{ width: 250, height: 150, padding:10 }}
           source={{
             uri:
               "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
