@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, Image } from "react-native";
+import { View, Text, TextInput, Button, Image, ScrollView } from "react-native";
 import CardView from "react-native-cardview";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { ml: 0, massa: '', totalMl: 0, resultadoText: "" };
+    this.state = { ml: 0, massa: "", totalMl: 0, resultadoText: "" };
     this.getKG();
   }
 
@@ -82,55 +82,57 @@ export default class Main extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: 250, height: 150, padding:10 }}
-          source={{
-            uri:
-              "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
-          }}
-        />
-        <TextInput
-          placeholder="padrão 35ml/kg"
-          style={styles.input}
-          keyboardType="numeric"
-          maxLength={3}
-          onChangeText={ml => {
-            this.setState({ ml });
-          }}
-        />
-        <View style={styles.entradas}>
-          <CardView
-            style={styles.card}
-            cardElevation={5}
-            cardMaxElevation={5}
-            cornerRadius={5}
-          >
-            <Text style={styles.resultado}>{this.state.resultadoText}</Text>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <Image
+            style={{ width: 250, height: 150, padding: 15 }}
+            source={{
+              uri:
+                "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
+            }}
+          />
+          <TextInput
+            placeholder="padrão 35ml/kg"
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={3}
+            onChangeText={ml => {
+              this.setState({ ml });
+            }}
+          />
+          <View style={styles.entradas}>
+            <CardView
+              style={styles.card}
+              cardElevation={5}
+              cardMaxElevation={5}
+              cornerRadius={5}
+            >
+              <Text style={styles.resultado}>{this.state.resultadoText}</Text>
 
-            <TextInput
-              placeholder="kg"
-              style={styles.input}
-              keyboardType="numeric"
-              maxLength={7}
-              value={String(this.state.massa)}
-              onChangeText={massa => {
-                this.setState({ massa });
-              }}
-            />
+              <TextInput
+                placeholder="kg"
+                style={styles.input}
+                keyboardType="numeric"
+                maxLength={7}
+                value={String(this.state.massa)}
+                onChangeText={massa => {
+                  this.setState({ massa });
+                }}
+              />
 
-            <Button
-              title="Calcular"
-              color={"#6495ED"}
-              onPress={this.calcular}
-            />
-          </CardView>
+              <Button
+                title="Calcular"
+                color={"#6495ED"}
+                onPress={this.calcular}
+              />
+            </CardView>
+          </View>
+          <Text style={styles.obs}>
+            Lembrando que a água não pode ser substituída por outros líquidos
+            como chás, sucos, refrigerantes, etc
+          </Text>
         </View>
-        <Text style={styles.obs}>
-          Lembrando que a água não pode ser substituída por outros líquidos como
-          chás, sucos, refrigerantes, etc
-        </Text>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -7,7 +7,8 @@ import {
   Image,
   Animated,
   Easing,
-  Vibration
+  Vibration,
+  ScrollView
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -38,7 +39,7 @@ export default class Bebi extends Component {
     headerTintColor: "#FFF" //"#6dc4a4"
   };
 
-  vibrate = (duration) => {
+  vibrate = duration => {
     //const DURATION = 10000;
     //const PATTERN = [1000, 2000, 3000];
 
@@ -111,7 +112,11 @@ export default class Bebi extends Component {
 
   verificaMeta = () => {
     const state = this.state;
-    if ((this.state.total / 1000 >= this.state.meta) && (this.state.total > 0) && (this.state.meta >0)) {
+    if (
+      this.state.total / 1000 >= this.state.meta &&
+      this.state.total > 0 &&
+      this.state.meta > 0
+    ) {
       state.atingiuMeta = true;
     } else {
       state.atingiuMeta = false;
@@ -151,32 +156,38 @@ export default class Bebi extends Component {
       </Animated.Text>
     );
     return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: 250, height: 180 }}
-          source={{
-            uri:
-              "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
-          }}
-        />
-        <Text style={styles.meta}>Minha meta: {this.state.meta}</Text>
-        <View>{this.state.atingiuMeta ? meta : null}</View>
-        <Text style={styles.resultado}>{this.state.resultadoText}</Text>
-        <View style={styles.entradas}>
-          <TextInput
-            placeholder="200ml"
-            style={styles.input}
-            keyboardType="numeric"
-            maxLength={5}
-            value={this.state.ml}
-            onChangeText={ml => {
-              this.setState({ ml });
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <Image
+            style={{ width: 250, height: 180 }}
+            source={{
+              uri:
+                "https://olhardigital.com.br/uploads/acervo_imagens/2019/02/r16x9/20190226124316_1200_675.jpg"
             }}
           />
-        </View>
+          <Text style={styles.meta}>Minha meta: {this.state.meta}</Text>
+          <View>{this.state.atingiuMeta ? meta : null}</View>
+          <Text style={styles.resultado}>{this.state.resultadoText}</Text>
+          <View style={styles.entradas}>
+            <TextInput
+              placeholder="200ml"
+              style={styles.input}
+              keyboardType="numeric"
+              maxLength={5}
+              value={this.state.ml}
+              onChangeText={ml => {
+                this.setState({ ml });
+              }}
+            />
+          </View>
 
-        <Button title="Adicionar" color={"#6495ED"} onPress={this.adicionar} />
-      </View>
+          <Button
+            title="Adicionar"
+            color={"#6495ED"}
+            onPress={this.adicionar}
+          />
+        </View>
+      </ScrollView>
     );
   }
 }
