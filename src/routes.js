@@ -7,6 +7,7 @@ import {
 import React from 'react';
 
 import Icon from "react-native-vector-icons/Ionicons";
+//https://oblador.github.io/react-native-vector-icons/
 
 import Main from "./pages/main";
 import Bebi from "./pages/bebi";
@@ -15,9 +16,9 @@ const HomeStack = createStackNavigator({ Main });
 const BebiStack = createStackNavigator({ Bebi });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: "Home",
+  tabBarLabel: "Configurações",
   tabBarIcon: (
-    <Icon name="md-home" size={18} color="#999" />
+    <Icon name="md-settings" size={18} color="#999" />
   )
 };
 
@@ -39,8 +40,9 @@ const Routes = createAppContainer(
 const Routes = createAppContainer(
   createBottomTabNavigator(
     {
-      HomeStack,
-      BebiStack
+      BebiStack,
+      HomeStack
+      
     },
     {
       tabBarOptions: {

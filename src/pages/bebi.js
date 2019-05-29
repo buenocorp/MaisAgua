@@ -118,6 +118,7 @@ export default class Bebi extends Component {
       this.state.meta > 0
     ) {
       state.atingiuMeta = true;
+      this.animate();
     } else {
       state.atingiuMeta = false;
     }
@@ -125,17 +126,23 @@ export default class Bebi extends Component {
     this.setState(state);
   };
 
-  componentDidMount() {
-    this.animate();
-  }
-
   animate() {
     this.animatedValue.setValue(0);
     Animated.timing(this.animatedValue, {
       toValue: 1,
       duration: 2000,
       easing: Easing.linear
-    }).start(() => this.animate());
+    }).start();
+
+    setTimeout(
+      () =>
+        this.animatedValue.stopAnimation(() => {
+          const state = this.state;
+          state.atingiuMeta = false;
+          this.setState(state);
+        }),
+      5000
+    );
   }
 
   render() {
@@ -144,6 +151,7 @@ export default class Bebi extends Component {
       inputRange: [0, 0.5, 1],
       outputRange: [18, 32, 18]
     });
+
     const meta = (
       <Animated.Text
         style={{
