@@ -5,15 +5,15 @@
 
 > Project created using react native - "MaisAgua" application designed to help people drink more water
 
-#Using
+>Using:
 
-State
-AsyncStorage
-CardView
-Animated
-createBottomTabNavigator
-StatusBar
-Vibration
+* State
+* AsyncStorage
+* CardView
+* Animated
+* createBottomTabNavigator
+* StatusBar
+* Vibration
 
 ## Install
 
