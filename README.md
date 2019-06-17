@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
 </p>
 
-> Project created using react native - "More Water" application designed to help people drink more water
+> Project created using react native - "MaisAgua" application designed to help people drink more water
 
 #Using
 
